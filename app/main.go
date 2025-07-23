@@ -12,6 +12,10 @@ func main() {
 	// You can use print statements as follows for debugging, they'll be visible when running tests.
 	fmt.Println("Logs from your program will appear here!")
 
+	header := [12]byte{0x04, 0xD2, 0x80, 0, 0, 1, 0, 0, 0, 0, 0, 0}
+	question := []byte("\x0ccodecrafters\x02io\x00\x00\x01\x00\x01")
+	// Uncomment this block to pass the first stage
+
 	udpAddr, err := net.ResolveUDPAddr("udp", "127.0.0.1:2053")
 	if err != nil {
 		fmt.Println("Failed to resolve UDP address:", err)
@@ -38,7 +42,7 @@ func main() {
 		fmt.Printf("Received %d bytes from %s: %s\n", size, source, receivedData)
 
 		// Create an empty response
-		response := []byte{0x04, 0xD2, 0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+		response := append(header[:], question...)
 
 		_, err = udpConn.WriteToUDP(response, source)
 		if err != nil {
